@@ -1,0 +1,20 @@
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - gradle build -x test
+  tags:
+    - gradle
+
+test:
+  stage: test
+  script:
+    - gradle test
+  tags:
+    - gradle
+  artifacts:
+    when: on_failure
+    expire_in: 1 day
