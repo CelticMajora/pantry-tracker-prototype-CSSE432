@@ -7,11 +7,13 @@ public class User {
 	private final long id;
 	private final String name;
 	private final List<Ingredient> ingredients;
+	private final List<User> friends;
 
-	public User(long id, String name, List<Ingredient> ingredients) {
+	public User(long id, String name, List<Ingredient> ingredients, List<User> friends) {
 		this.id = id;
 		this.name = name;
 		this.ingredients = ingredients;
+		this.friends = friends;
 	}
 
 	public long getId() {
@@ -24,6 +26,10 @@ public class User {
 	
 	public List<Ingredient> getIngredients() {
 		return this.ingredients;
+	}
+	
+	public List<User> getFriends(){
+		return this.friends;
 	}
 
 }

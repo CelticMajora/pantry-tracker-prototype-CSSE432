@@ -19,7 +19,7 @@ public class UserController {
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public User getUser(@RequestParam(value = "name", defaultValue = "defaultName") String name) {
 		//TODO change param to id and return out of database
-		return new User(counter.incrementAndGet(), name, new LinkedList<Ingredient>());
+		return new User(counter.incrementAndGet(), name, new LinkedList<Ingredient>(), new LinkedList<User>());
 	}
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
@@ -27,7 +27,7 @@ public class UserController {
 		if(name == null) {
 			//TODO send 500
 		}
-		//TODO store new User and return 200
+		//TODO check if user exists. If so, update that user. If not create new User. Return 200
 	}
 	
 	@RequestMapping(value = "/user", method = RequestMethod.DELETE)

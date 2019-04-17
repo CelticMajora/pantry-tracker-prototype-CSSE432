@@ -29,7 +29,7 @@ public class IngredientController {
 		if(name == null) {
 			//TODO send 500
 		}
-		//TODO store new Ingredient and return 200
+		//TODO check if ingredient exists. If so, update that ingredient. If not create new ingredient. Return 200
 	}
 	
 	@RequestMapping(value = "/ingredient", method = RequestMethod.DELETE)
