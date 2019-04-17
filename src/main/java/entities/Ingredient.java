@@ -1,22 +1,32 @@
-package representations;
+package entities;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Ingredient {
 
-	private final long id;
-	private final String name;
-	private final LocalDate expirationDate;
-	private final IngredientPermissionLevel ingredientPermissionLevel;
-	
-	public Ingredient(long id, String name, LocalDate expirationDate, IngredientPermissionLevel ingredientPermissionLevel){
-		this.id = id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+
+	private String name;
+
+	private LocalDate expirationDate;
+
+	private IngredientPermissionLevel ingredientPermissionLevel;
+
+	public Ingredient(String name, LocalDate expirationDate, IngredientPermissionLevel ingredientPermissionLevel) {
 		this.name = name;
 		this.expirationDate = expirationDate;
 		this.ingredientPermissionLevel = ingredientPermissionLevel;
 	}
 
-	public long getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
@@ -27,7 +37,7 @@ public class Ingredient {
 	public LocalDate getExpirationDate() {
 		return this.expirationDate;
 	}
-	
+
 	public IngredientPermissionLevel getIngredientPermissionLevel() {
 		return this.ingredientPermissionLevel;
 	}
