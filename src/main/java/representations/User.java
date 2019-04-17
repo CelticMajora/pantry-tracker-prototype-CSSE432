@@ -1,4 +1,4 @@
-package api.representations;
+package representations;
 
 import java.util.List;
 

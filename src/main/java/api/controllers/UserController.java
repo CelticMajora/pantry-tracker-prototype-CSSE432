@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.representations.Ingredient;
-import api.representations.User;
+import representations.Ingredient;
+import representations.User;
 
 @RestController
 public class UserController {
