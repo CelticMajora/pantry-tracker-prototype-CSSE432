@@ -32,7 +32,7 @@ public class IngredientController {
 		//TODO store new Ingredient and return 200
 	}
 	
-	@RequestMapping(value = "/user", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/ingredient", method = RequestMethod.DELETE)
 	public void deleteIngredient(@RequestParam(value = "name") String name) {
 		if(name == null) {
 			//TODO send 500
