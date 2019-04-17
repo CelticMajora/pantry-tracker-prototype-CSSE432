@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import representations.Ingredient;
+import representations.Ingredient.IngredientPermissionLevel;
 
 @RestController
 public class IngredientController {
@@ -21,7 +22,7 @@ public class IngredientController {
 			@RequestParam(value = "expirationMonth", defaultValue = "1") String expirationMonth,
 			@RequestParam(value = "expirationDayOfMonth", defaultValue = "1") String expirationDayOfMonth) {
 		return new Ingredient(counter.incrementAndGet(), name, LocalDate.of(Integer.parseInt(expirationYear),
-				Integer.parseInt(expirationMonth), Integer.parseInt(expirationDayOfMonth)));
+				Integer.parseInt(expirationMonth), Integer.parseInt(expirationDayOfMonth)), IngredientPermissionLevel.NOT_UP_FOR_GRABS);
 	}
 	
 	@RequestMapping(value = "/ingredient", method = RequestMethod.POST)
