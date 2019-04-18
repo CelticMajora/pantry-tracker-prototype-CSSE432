@@ -19,24 +19,36 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 
+//	@RequestMapping(value = "/user", method = RequestMethod.GET)
+//	public @ResponseBody User getUser(@RequestParam String name) {
+//		Iterator<User> iterator = userRepository.findAll().iterator();
+//		while(iterator.hasNext()) {
+//			User next = iterator.next();
+//			if(next.getName().equals(name)) {
+//				return next;
+//			}
+//		}
+//		return null;
+//	}
+	
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public @ResponseBody User getUser(@RequestParam String name) {
-		Iterator<User> iterator = userRepository.findAll().iterator();
-		while(iterator.hasNext()) {
-			User next = iterator.next();
-			if(next.getName().equals(name)) {
-				return next;
-			}
-		}
-		return null;
-	}
-
-	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public @ResponseBody String postUser(@RequestParam String name) {
 		User toStore = new User(name);
 		userRepository.save(toStore);
 		return "Saved";
 	}
+	
+	@RequestMapping(value = "/user/all", method = RequestMethod.GET)
+	public @ResponseBody Iterable<User> all() {
+		return userRepository.findAll();
+	}
+
+//	@RequestMapping(value = "/user", method = RequestMethod.POST)
+//	public @ResponseBody String postUser(@RequestParam String name) {
+//		User toStore = new User(name);
+//		userRepository.save(toStore);
+//		return "Saved";
+//	}
 
 	@RequestMapping(value = "/user", method = RequestMethod.DELETE)
 	public void deleteUser(@RequestParam(value = "name") String name) {
