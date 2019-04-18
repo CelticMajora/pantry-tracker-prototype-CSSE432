@@ -3,14 +3,14 @@ stages:
   - test
 
 build:
+  image: gradle:latest
   stage: build
   script:
     - gradle build -x test
-  tags:
-    - gradle
   allow_failure: true #Need to figure out how to get gitlab gradle runner to run gradle 5
 
 test:
+  image: gradle:latest
   stage: test
   script:
     - gradle test
