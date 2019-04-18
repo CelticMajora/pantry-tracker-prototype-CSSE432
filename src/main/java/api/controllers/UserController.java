@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import entities.Ingredient;
-import entities.User;
-import repositories.UserRepository;
+import api.entities.Ingredient;
+import api.entities.User;
+import api.repositories.UserRepository;
 
 @RestController
 public class UserController {
@@ -33,7 +33,7 @@ public class UserController {
 
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public @ResponseBody String postUser(@RequestParam String name) {
-		User toStore = new User(name, new LinkedList<Ingredient>(), new LinkedList<User>());
+		User toStore = new User(name);
 		userRepository.save(toStore);
 		return "Saved";
 	}

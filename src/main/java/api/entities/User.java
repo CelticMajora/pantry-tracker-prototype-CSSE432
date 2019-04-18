@@ -1,4 +1,4 @@
-package entities;
+package api.entities;
 
 import java.util.List;
 
@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.springframework.context.annotation.Bean;
 
 @Entity
 public class User {
@@ -16,14 +18,14 @@ public class User {
 
 	private String name;
 
-	private List<Ingredient> ingredients;
+	//private List<Ingredient> ingredients;
 
-	private List<User> friends;
-
-	public User(String name, List<Ingredient> ingredients, List<User> friends) {
+	//private List<User> friends;
+	
+	public User(String name) {
 		this.name = name;
-		this.ingredients = ingredients;
-		this.friends = friends;
+		//this.ingredients = ingredients;
+		//this.friends = friends;
 	}
 
 	public Integer getId() {
@@ -33,7 +35,7 @@ public class User {
 	public String getName() {
 		return this.name;
 	}
-
+/*
 	public List<Ingredient> getIngredients() {
 		return this.ingredients;
 	}
@@ -41,5 +43,5 @@ public class User {
 	public List<User> getFriends() {
 		return this.friends;
 	}
-
+*/
 }

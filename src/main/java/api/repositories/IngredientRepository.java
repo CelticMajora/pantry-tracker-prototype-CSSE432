@@ -1,8 +1,8 @@
-package repositories;
+package api.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 
-import entities.Ingredient;
+import api.entities.Ingredient;
 
 public interface IngredientRepository extends CrudRepository<Ingredient, Integer> {
 

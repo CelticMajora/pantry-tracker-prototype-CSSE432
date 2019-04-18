@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import entities.Ingredient;
-import entities.Ingredient.IngredientPermissionLevel;
-import repositories.IngredientRepository;
+import api.entities.Ingredient;
+import api.entities.Ingredient.IngredientPermissionLevel;
+import api.repositories.IngredientRepository;
 
 @RestController
 public class IngredientController {
