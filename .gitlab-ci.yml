@@ -14,9 +14,7 @@ stages:
 gradle-build:
   stage: build
   script:
-    - gradle build
-  tags:
-    - gradle
+    - ./gradlew build
   artifacts:
     paths:
       - build/libs/*.jar
