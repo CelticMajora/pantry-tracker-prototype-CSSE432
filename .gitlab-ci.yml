@@ -1,22 +1,42 @@
 image: gradle:latest
+services:
+  - docker:dind
+  
+variables:
+  DOCKER_DRIVER: overlay
+  SPRING_PROFILES_ACTIVE: gitlab-ci
 
 stages:
   - build
-  - test
+  - package
+  - deploy
 
-build:
+gradle-build:
   image: gradle:5.4.0-jdk8
   stage: build
   script:
-    - gradle build -x test
-  allow_failure: true #Need to figure out how to get gitlab gradle runner to run gradle 5
-
-test:
-  image: gradle:5.4.0-jdk8
-  stage: test
-  script:
-    - gradle test
+    - gradle build
   artifacts:
-    when: on_failure
-    expire_in: 1 day
-  allow_failure: true #Need to figure out how to get gitlab gradle runner to run gradle 5
+    paths:
+      - build/libs/*.jar
+
+docker-build:
+  stage: package
+  script:
+  - docker build -t docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN docker.csse.rose-hulman.edu
+  - docker push docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
+  
+k8s-deploy:
+  image: google/cloud-sdk
+  stage: deploy
+  script:
+  - echo "$GOOGLE_KEY" > key.json
+  - gcloud auth activate-service-account --key-file key.json
+  - gcloud config set compute/zone us-central1-a
+  - gcloud config set project pantry-tracker
+  - gcloud config set container/use_client_certificate True
+  - gcloud container clusters get-credentials pantry-tracker
+  - kubectl delete secret docker.csse.rose-hulman.edu
+  - kubectl create secret docker-registry docker.csse.rose-hulman.edu --docker-server=https://docker.csse.rose-hulman.edu --docker-username=donohoc1 --docker-password=$REGISTRY_PASSWD --docker-email=donohoc1@rose-hulman.edu
+  - kubectl apply -f deployment.yml
