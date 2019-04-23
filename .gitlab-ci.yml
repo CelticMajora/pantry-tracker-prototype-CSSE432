@@ -12,10 +12,11 @@ stages:
   - deploy
 
 gradle-build:
-  image: gradle:5.4.0-jdk8
   stage: build
   script:
     - gradle build
+  tags:
+    - gradle
   artifacts:
     paths:
       - build/libs/*.jar
