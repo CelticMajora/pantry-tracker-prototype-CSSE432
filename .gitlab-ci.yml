@@ -27,7 +27,7 @@ docker-build:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN docker.csse.rose-hulman.edu
   - docker push docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
   
-k8s-deploy:
+k8s-deploy-staging:
   image: google/cloud-sdk
   stage: deploy
   script:
@@ -39,4 +39,27 @@ k8s-deploy:
   - gcloud container clusters get-credentials pantry-tracker
   - kubectl delete secret docker.csse.rose-hulman.edu
   - kubectl create secret docker-registry docker.csse.rose-hulman.edu --docker-server=https://docker.csse.rose-hulman.edu --docker-username=donohoc1 --docker-password=$REGISTRY_PASSWD --docker-email=donohoc1@rose-hulman.edu
-  - kubectl apply -f deployment.yml
+  - kubectl apply -f deployment.yml --namespace=staging
+  environment:
+    name: staging
+    url: https://staging.pantry-tracker.com
+  only:
+  - master
+  
+k8s-deploy-production:
+  image: google/cloud-sdk
+  stage: deploy
+  script:
+  - echo "$GOOGLE_KEY" > key.json
+  - gcloud auth activate-service-account --key-file key.json
+  - gcloud config set compute/zone us-central1-a
+  - gcloud config set project pantry-tracker
+  - gcloud config set container/use_client_certificate True
+  - gcloud container clusters get-credentials pantry-tracker
+  - kubectl delete secret docker.csse.rose-hulman.edu
+  - kubectl create secret docker-registry docker.csse.rose-hulman.edu --docker-server=https://docker.csse.rose-hulman.edu --docker-username=donohoc1 --docker-password=$REGISTRY_PASSWD --docker-email=donohoc1@rose-hulman.edu
+  - kubectl apply -f deployment.yml --namespace=production
+  environment:
+    name: production
+    url: https://production.pantry-tracker.com
+  when: manual
