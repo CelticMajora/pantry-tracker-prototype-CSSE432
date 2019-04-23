@@ -19,6 +19,8 @@ gradle-build:
 docker-build:
   stage: package
   image: gradle:latest
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
   services:
   - docker:dind
   script:
