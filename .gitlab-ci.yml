@@ -1,3 +1,7 @@
+image: docker:latest
+services:
+  - docker:dind
+
 variables:
   DOCKER_DRIVER: overlay
   SPRING_PROFILES_ACTIVE: gitlab-ci
@@ -18,17 +22,10 @@ gradle-build:
 
 docker-build:
   stage: package
-  image: gradle:latest
-  variables:
-    DOCKER_HOST: tcp://localhost:2375
-  services:
-  - docker:dind
   script:
   - docker build -t docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN docker.csse.rose-hulman.edu
   - docker push docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
-  tags:
-  - kubernetes-stage
   
 k8s-deploy-staging:
   image: google/cloud-sdk
