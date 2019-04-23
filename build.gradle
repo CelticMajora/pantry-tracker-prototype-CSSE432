@@ -45,3 +45,8 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+wrapper {
+	distributionType = Wrapper.DistributionType.ALL
+	distributionUrl=https\://services.gradle.org/distributions/gradle-5.4-all.zip
+}
+
