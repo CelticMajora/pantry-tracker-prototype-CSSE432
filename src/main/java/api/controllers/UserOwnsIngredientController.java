@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.entities.FriendsWith;
 import api.entities.Ingredient;
-import api.repositories.FriendsWithRepository;
 import api.repositories.IngredientRepository;
 
 @RestController
