@@ -12,23 +12,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.entities.UserOwnsIngredient;
-import api.repositories.UserOwnsIngredientRepository;
+import api.entities.FriendsWith;
+import api.entities.Ingredient;
+import api.repositories.FriendsWithRepository;
+import api.repositories.IngredientRepository;
 
 @CrossOrigin(origins = "http://127.0.0.1:8081")
 @RestController
 public class UserOwnsIngredientController {
 
 	@Autowired
-	private UserOwnsIngredientRepository userOwnsIngredientRepository;
+	private IngredientRepository ingredientRepository;
 
 	@RequestMapping(value = "/ownership", method = RequestMethod.GET)
-	public @ResponseBody List<UserOwnsIngredient> getOwnership(@RequestParam String id) {
-		List<UserOwnsIngredient> ownership = new LinkedList<UserOwnsIngredient>();
-		Iterator<UserOwnsIngredient> iterator = userOwnsIngredientRepository.findAll().iterator();
+	public @ResponseBody List<Ingredient> getOwnership(@RequestParam String id) {
+		List<Ingredient> ownership = new LinkedList<Ingredient>();
+		Iterator<Ingredient> iterator = ingredientRepository.findAll().iterator();
 		while (iterator.hasNext()) {
-			UserOwnsIngredient next = iterator.next();
-			if (next.getUserId().equals(Integer.parseInt(id))) {
+			Ingredient next = iterator.next();
+			if (next.getOwnerId().equals(Integer.parseInt(id))) {
 				ownership.add(next);
 			}
 		}
@@ -36,16 +38,8 @@ public class UserOwnsIngredientController {
 	}
 
 	@RequestMapping(value = "/ownership/all", method = RequestMethod.GET)
-	public @ResponseBody Iterable<UserOwnsIngredient> getAllOwnership() {
-		return userOwnsIngredientRepository.findAll();
+	public @ResponseBody Iterable<Ingredient> getAllOwnership() {
+		return ingredientRepository.findAll();
 	}
 	
-	@RequestMapping(value = "/ownership", method = RequestMethod.POST)
-	public @ResponseBody String postOwnership(@RequestParam String userId, @RequestParam String ingredientId) {
-		UserOwnsIngredient toStore = new UserOwnsIngredient();
-		toStore.setUserId(Integer.parseInt(userId));
-		toStore.setIngredientId(Integer.parseInt(ingredientId));
-		userOwnsIngredientRepository.save(toStore);
-		return "Saved";
-	}
 }

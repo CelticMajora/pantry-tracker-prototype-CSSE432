@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class UserOwnsIngredient {
+public class FriendsWith {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,7 +14,7 @@ public class UserOwnsIngredient {
 	
 	private Integer userId;
 	
-	private Integer ingredientId;
+	private Integer friendId;
 	
 	public Integer getId() {
 		return this.id;
@@ -31,13 +31,13 @@ public class UserOwnsIngredient {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	
-	public Integer getIngredientId() {
-		return this.ingredientId;
+
+	public Integer getFriendId() {
+		return friendId;
 	}
-	
-	public void setIngredientId(Integer ingredientId) {
-		this.ingredientId = ingredientId;
+
+	public void setFriendId(Integer friendId) {
+		this.friendId = friendId;
 	}
 
 }
