@@ -1,6 +1,9 @@
 package api.controllers;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import api.entities.FriendsWith;
 import api.entities.User;
+import api.repositories.FriendsWithRepository;
 import api.repositories.UserRepository;
 
 @CrossOrigin(origins = "http://127.0.0.1:8081")
@@ -18,6 +23,9 @@ import api.repositories.UserRepository;
 public class UserController {
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private FriendsWithRepository friendsRepository;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public @ResponseBody User getUser(@RequestParam String id) {
@@ -31,6 +39,21 @@ public class UserController {
 			}
 		}
 		throw new RuntimeException(String.format("Unable to find user with id: %s", id));
+	}
+	@RequestMapping(value = "/user/friends", method = RequestMethod.GET)
+	public @ResponseBody List<User> getUsersFriends(@RequestParam String id) {
+		ArrayList<User> friends = new ArrayList<User>(); 
+		Iterator<FriendsWith> iterator = friendsRepository.findAll().iterator();
+		while(iterator.hasNext()) {
+			FriendsWith next = iterator.next();
+			if(next.getUserId().equals(Integer.parseInt(id))) {
+				Optional<User> ans = userRepository.findById(next.getFriendId());
+				if(ans.isPresent()){
+					friends.add(ans.get());					
+				}
+			}
+		}
+		return friends;
 	}
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)

@@ -40,10 +40,11 @@ public class IngredientController {
 	}
 
 	@RequestMapping(value = "/ingredient", method = RequestMethod.POST)
-	public @ResponseBody String postIngredient(@RequestParam String name, @RequestParam String expirationYear,
+	public @ResponseBody String postIngredient(@RequestParam String name, @RequestParam String ownerId, @RequestParam String expirationYear,
 			@RequestParam String expirationMonth, @RequestParam String expirationDayOfMonth) {
 		Ingredient toStore = new Ingredient();
 		toStore.setName(name);
+		toStore.setOwnerId(Integer.valueOf(ownerId));
 		toStore.setExpirationDate(LocalDate.of(Integer.parseInt(expirationYear), Integer.parseInt(expirationMonth),
 				Integer.parseInt(expirationDayOfMonth)));
 		toStore.setIngredientPermissionLevel(IngredientPermissionLevel.NOT_UP_FOR_GRABS);
