@@ -25,6 +25,8 @@ docker-build:
   - docker build -t docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN docker.csse.rose-hulman.edu
   - docker push docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
+  tags:
+  - pantry-tracker
   
 k8s-deploy-staging:
   image: google/cloud-sdk
