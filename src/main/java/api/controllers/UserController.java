@@ -55,6 +55,15 @@ public class UserController {
 		}
 		return friends;
 	}
+	@RequestMapping(value = "/user/friends/all", method = RequestMethod.GET)
+	public @ResponseBody List<FriendsWith> getAllFriends() {
+		ArrayList<FriendsWith> friends = new ArrayList<FriendsWith>();
+		Iterator<FriendsWith> iterator = friendsRepository.findAll().iterator();
+		while(iterator.hasNext()) {
+			friends.add(iterator.next());
+		}
+		return friends;
+	}
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public @ResponseBody String postUser(@RequestParam String name) {
