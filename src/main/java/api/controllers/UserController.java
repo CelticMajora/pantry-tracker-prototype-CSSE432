@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import api.entities.FriendsWith;
+import api.entities.Ingredient;
 import api.entities.User;
 import api.repositories.FriendsWithRepository;
+import api.repositories.IngredientRepository;
 import api.repositories.UserRepository;
 
 @RestController
@@ -24,6 +26,9 @@ public class UserController {
 	
 	@Autowired
 	private FriendsWithRepository friendsRepository;
+	
+	@Autowired
+	private IngredientRepository ingredientRepository;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public @ResponseBody User getUser(@RequestParam String id) {
@@ -36,6 +41,7 @@ public class UserController {
 		}
 		throw new RuntimeException(String.format("Unable to find user with id: %s", id));
 	}
+	
 	@RequestMapping(value = "/user/friends", method = RequestMethod.GET)
 	public @ResponseBody List<User> getUsersFriends(@RequestParam String id) {
 		ArrayList<User> friends = new ArrayList<User>(); 
@@ -75,8 +81,25 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user", method = RequestMethod.DELETE)
-	public void deleteUser(@RequestParam String name) {
+	public void deleteUser(@RequestParam String id) {
 		// TODO delete User and return 200
+		Iterator<FriendsWith> iterator = friendsRepository.findAll().iterator();
+		while(iterator.hasNext()){
+			FriendsWith next = iterator.next();
+			if(next.getUserId().equals(Integer.parseInt(id))){
+				friendsRepository.delete(next);
+			}
+		}
+		Iterator<Ingredient> iter = ingredientRepository.findAll().iterator();
+		while(iter.hasNext()){
+			Ingredient next = iter.next();
+			if(next.getOwnerId().equals(Integer.parseInt(id))){
+				ingredientRepository.delete(next);
+			}
+		}
+		
+		userRepository.deleteById(Integer.parseInt(id));
+	
 	}
 
 }
