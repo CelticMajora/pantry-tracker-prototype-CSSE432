@@ -1,8 +1,6 @@
 package api.controllers;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import api.entities.FriendRequestFor;
 import api.entities.FriendsWith;
 import api.entities.Ingredient;
 import api.entities.User;
+import api.repositories.FriendRequestForRepository;
 import api.repositories.FriendsWithRepository;
 import api.repositories.IngredientRepository;
 import api.repositories.UserRepository;
@@ -23,58 +23,33 @@ import api.repositories.UserRepository;
 public class UserController {
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private FriendsWithRepository friendsRepository;
-	
+
+	@Autowired
+	private FriendRequestForRepository friendRequestRepository;
+
 	@Autowired
 	private IngredientRepository ingredientRepository;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public @ResponseBody User getUser(@RequestParam String id) {
-		Iterator<User> iterator = userRepository.findAll().iterator();
-		while(iterator.hasNext()) {
-			User next = iterator.next();
-			if(next.getId().equals(Integer.parseInt(id))) {
-				return next;
-			}
+		Optional<User> user = userRepository.findById(Integer.parseInt(id));
+		if(user.isPresent()) {
+			return user.get();
 		}
 		throw new RuntimeException(String.format("Unable to find user with id: %s", id));
 	}
-	
-	@RequestMapping(value = "/user/friends", method = RequestMethod.GET)
-	public @ResponseBody List<User> getUsersFriends(@RequestParam String id) {
-		ArrayList<User> friends = new ArrayList<User>(); 
-		Iterator<FriendsWith> iterator = friendsRepository.findAll().iterator();
-		while(iterator.hasNext()) {
-			FriendsWith next = iterator.next();
-			if(next.getUserId().equals(Integer.parseInt(id))) {
-				Optional<User> ans = userRepository.findById(next.getFriendId());
-				if(ans.isPresent()){
-					friends.add(ans.get());					
-				}
-			}
-		}
-		return friends;
-	}
-	@RequestMapping(value = "/user/friends/all", method = RequestMethod.GET)
-	public @ResponseBody List<FriendsWith> getAllFriends() {
-		ArrayList<FriendsWith> friends = new ArrayList<FriendsWith>();
-		Iterator<FriendsWith> iterator = friendsRepository.findAll().iterator();
-		while(iterator.hasNext()) {
-			friends.add(iterator.next());
-		}
-		return friends;
-	}
-	
+
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	public @ResponseBody String postUser(@RequestParam String name) {
+	public @ResponseBody User postUser(@RequestParam String name) {
 		User toStore = new User();
 		toStore.setName(name);
 		userRepository.save(toStore);
-		return "Saved";
+		return toStore;
 	}
-	
+
 	@RequestMapping(value = "/user/all", method = RequestMethod.GET)
 	public @ResponseBody Iterable<User> getAllUsers() {
 		return userRepository.findAll();
@@ -82,24 +57,32 @@ public class UserController {
 
 	@RequestMapping(value = "/user", method = RequestMethod.DELETE)
 	public void deleteUser(@RequestParam String id) {
-		// TODO delete User and return 200
-		Iterator<FriendsWith> iterator = friendsRepository.findAll().iterator();
-		while(iterator.hasNext()){
-			FriendsWith next = iterator.next();
-			if(next.getUserId().equals(Integer.parseInt(id))){
+		Iterator<FriendsWith> friendsIterator = friendsRepository.findAll().iterator();
+		while (friendsIterator.hasNext()) {
+			FriendsWith next = friendsIterator.next();
+			if (next.getUserId().equals(Integer.parseInt(id)) || next.getFriendId().equals(Integer.parseInt(id))) {
 				friendsRepository.delete(next);
 			}
 		}
-		Iterator<Ingredient> iter = ingredientRepository.findAll().iterator();
-		while(iter.hasNext()){
-			Ingredient next = iter.next();
-			if(next.getOwnerId().equals(Integer.parseInt(id))){
+
+		Iterator<Ingredient> ingredientsIterator = ingredientRepository.findAll().iterator();
+		while (ingredientsIterator.hasNext()) {
+			Ingredient next = ingredientsIterator.next();
+			if (next.getOwnerId().equals(Integer.parseInt(id))) {
 				ingredientRepository.delete(next);
 			}
 		}
-		
+
+		Iterator<FriendRequestFor> friendRequestsIterator = friendRequestRepository.findAll().iterator();
+		while (friendRequestsIterator.hasNext()) {
+			FriendRequestFor next = friendRequestsIterator.next();
+			if (next.getUserId().equals(Integer.parseInt(id))
+					|| next.getFriendRequestedId().equals(Integer.parseInt(id))) {
+				friendRequestRepository.delete(next);
+			}
+		}
+
 		userRepository.deleteById(Integer.parseInt(id));
-	
 	}
 
 }
