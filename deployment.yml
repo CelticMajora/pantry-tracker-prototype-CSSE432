@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pantry-tracker
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: pantry-tracker
+    spec:
+      containers:
+      - name: pantry-tracker
+        image: docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+        - name: docker.csse.rose-hulman.edu

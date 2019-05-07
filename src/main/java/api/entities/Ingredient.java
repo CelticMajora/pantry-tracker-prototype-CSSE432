@@ -19,6 +19,8 @@ public class Ingredient {
 	private LocalDate expirationDate;
 
 	private IngredientPermissionLevel ingredientPermissionLevel;
+	
+	private Integer ownerId;
 
 	public Integer getId() {
 		return this.id;
@@ -54,6 +56,13 @@ public class Ingredient {
 
 	public enum IngredientPermissionLevel {
 		FREE_TO_SHARE, WILLING_TO_BARTER, NOT_UP_FOR_GRABS
+	}
+	
+	public Integer getOwnerId(){
+		return this.ownerId;
+	}
+	public void setOwnerId(Integer ownerId){
+		this.ownerId = ownerId;
 	}
 
 }

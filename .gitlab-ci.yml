@@ -1,22 +1,23 @@
-image: gradle:latest
-
 stages:
   - build
   - test
 
-build:
-  image: gradle:5.4.0-jdk8
+gradle-build:
   stage: build
   script:
-    - gradle build -x test
-  allow_failure: true #Need to figure out how to get gitlab gradle runner to run gradle 5
+    - chmod +x ./gradlew
+    - ./gradlew build -x test
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1 week
 
 test:
-  image: gradle:5.4.0-jdk8
   stage: test
   script:
-    - gradle test
+    - chmod +x ./gradlew
+    - ./gradlew test
   artifacts:
     when: on_failure
-    expire_in: 1 day
-  allow_failure: true #Need to figure out how to get gitlab gradle runner to run gradle 5
+    untracked: true
+    expire_in: 1 week
