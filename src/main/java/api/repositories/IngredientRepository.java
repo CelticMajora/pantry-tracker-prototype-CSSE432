@@ -6,4 +6,8 @@ import api.entities.Ingredient;
 
 public interface IngredientRepository extends CrudRepository<Ingredient, Integer> {
 
+	
+	
+	
+	
 }
