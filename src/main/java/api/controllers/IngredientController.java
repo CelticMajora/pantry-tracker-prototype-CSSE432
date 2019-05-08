@@ -1,6 +1,7 @@
 package api.controllers;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,37 +26,54 @@ public class IngredientController {
 	@Autowired
 	private IngredientRepository ingredientRepository;
 
-	
 	@RequestMapping(value = "/user/ingredient", method = RequestMethod.GET)
 	public @ResponseBody List<Ingredient> getUsersIngredient(@RequestParam String userId) {
-		ArrayList<Ingredient> ans = new ArrayList<Ingredient>();
+		List<Ingredient> ingredients = new ArrayList<Ingredient>();
 		Iterator<Ingredient> iterator = ingredientRepository.findAll().iterator();
 		while (iterator.hasNext()) {
 			Ingredient next = iterator.next();
 			if (next.getOwnerId().equals(Integer.parseInt(userId))) {
-				ans.add(next);
+				ingredients.add(next);
 			}
 		}
-		return ans;
+		return ingredients;
 	}
-	
+
+	@RequestMapping(value = "/user/ingredient/expiring_soon", method = RequestMethod.GET)
+	public @ResponseBody List<Ingredient> getUsersExpiringIngredients(@RequestParam String userId,
+			@RequestParam String timezoneCode) {
+		List<Ingredient> ingredients = new ArrayList<Ingredient>();
+		Iterator<Ingredient> iterator = ingredientRepository.findAll().iterator();
+		while (iterator.hasNext()) {
+			Ingredient next = iterator.next();
+			if (next.getOwnerId().equals(Integer.parseInt(userId))) {
+				LocalDate now = LocalDate.now(ZoneId.of(timezoneCode));
+				if(next.getExpirationDate().until(now).getDays() < 4) {
+					ingredients.add(next);
+				}				
+			}
+		}
+		return ingredients;
+	}
+
 	@RequestMapping(value = "/ingredient", method = RequestMethod.GET)
 	public @ResponseBody Ingredient getIngredient(@RequestParam String id) {
 		Optional<Ingredient> ingredient = ingredientRepository.findById(Integer.parseInt(id));
-		if(ingredient.isPresent()) {
+		if (ingredient.isPresent()) {
 			return ingredient.get();
 		}
 		throw new RuntimeException(String.format("Unable to find ingredient with id: %s", id));
 	}
-	
+
 	@RequestMapping(value = "/ingredient/all", method = RequestMethod.GET)
-	public @ResponseBody Iterable<Ingredient> getAllIngredients(){
+	public @ResponseBody Iterable<Ingredient> getAllIngredients() {
 		return ingredientRepository.findAll();
 	}
 
 	@RequestMapping(value = "/user/ingredient", method = RequestMethod.POST)
-	public @ResponseBody String postIngredient(@RequestParam String name, @RequestParam String ownerId, @RequestParam String expirationYear,
-			@RequestParam String expirationMonth, @RequestParam String expirationDayOfMonth) {
+	public @ResponseBody Ingredient postIngredient(@RequestParam String name, @RequestParam String ownerId,
+			@RequestParam String expirationYear, @RequestParam String expirationMonth,
+			@RequestParam String expirationDayOfMonth) {
 		Ingredient toStore = new Ingredient();
 		toStore.setName(name);
 		toStore.setOwnerId(Integer.valueOf(ownerId));
@@ -63,14 +81,14 @@ public class IngredientController {
 				Integer.parseInt(expirationDayOfMonth)));
 		toStore.setIngredientPermissionLevel(IngredientPermissionLevel.NOT_UP_FOR_GRABS);
 		ingredientRepository.save(toStore);
-		return "Added";
+		return toStore;
 	}
 
 	@RequestMapping(value = "/user/ingredient", method = RequestMethod.DELETE)
 	public void deleteIngredientByUser(@RequestParam String userId, @RequestParam String id) {
 		ingredientRepository.deleteById(Integer.parseInt(id));
 	}
-	
+
 	@RequestMapping(value = "/ingredient", method = RequestMethod.DELETE)
 	public void deleteIngredient(@RequestParam String id) {
 		ingredientRepository.deleteById(Integer.parseInt(id));
