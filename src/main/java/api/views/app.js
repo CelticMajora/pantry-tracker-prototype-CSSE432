@@ -2,7 +2,7 @@
  * 
  */
 
-const URL = '127.0.0.1:8080/';
+const URL = 'http://127.0.0.1:8080/';
 
 const app = {
 		
@@ -10,8 +10,12 @@ const app = {
 		init(selectors){
 			this.user = -1;
 			
-			this.loginForm = document.querySelector(seletors.loginFormSelector);
-			this.loginForm.addEventListener('submit', this.handleLogin.bind(this));
+			this.loginForm = document.querySelector(selectors.loginFormSelector);
+			if(this.loginForm !== null){
+				this.loginForm.addEventListener('submit', this.handleLogin.bind(this));
+			}else{
+				console.log('loginForm not found');
+			}
 			
 			this.ingredients = document.querySelector(selectors.ingredientsSelector);
 			
@@ -20,12 +24,16 @@ const app = {
 		
 		//form.querySelector
 		//event ev 
-		handleLogin(form, ev){
+		handleLogin(ev){
 			//get userID from form
 			//fill out the user object
+			console.log(ev.target.querySelector('.id').value);
+			fetch(URL+'user?id='+ev.target.querySelector('.id').value,
+					{mode: "no-cors",
+					redirect:"follow",
+					}).then((response) => console.log(response.text())).then((data) => console.log(data));
 			
 			//ev.preventDefault();
-			const id = form.querySelector('.userID').value;
 			//use fetch to do API calls
 			
 		},
@@ -36,6 +44,8 @@ const app = {
 			//display user info?
 			
 			//get friends
+			
+			
 			//render all friends
 			
 			//get ingredients
@@ -67,7 +77,7 @@ const app = {
 }
 
 app.init({
-	loginFormSelector: "",
+	loginFormSelector: "form.login",
 	ingredientsSelector: "#contents li",
 	friendsSelector: "#friends li",
 })
