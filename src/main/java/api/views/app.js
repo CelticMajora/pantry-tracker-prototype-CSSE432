@@ -22,7 +22,6 @@ const app = {
 			this.friends = document.querySelector(selectors.friendsSelector);
 		},
 		
-		//form.querySelector
 		//event ev 
 		handleLogin(ev){
 			//get userID from form

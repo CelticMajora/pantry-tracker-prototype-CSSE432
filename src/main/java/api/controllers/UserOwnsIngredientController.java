@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import api.entities.UserOwnsIngredient;
 import api.repositories.UserOwnsIngredientRepository;
 
-@CrossOrigin
+@CrossOrigin(origins = "127.0.0.1:8081/pantry.html")
 @RestController
 public class UserOwnsIngredientController {
 

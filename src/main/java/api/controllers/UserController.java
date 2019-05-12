@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import api.entities.User;
 import api.repositories.UserRepository;
 
-@CrossOrigin(origins = "./src/main/java/api/views/pantry.html")
+@CrossOrigin(origins = "127.0.0.1:8081/pantry.html")
 @RestController
 public class UserController {
 	@Autowired
@@ -21,10 +21,12 @@ public class UserController {
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public @ResponseBody User getUser(@RequestParam String id) {
+		System.out.println(id);
 		Iterator<User> iterator = userRepository.findAll().iterator();
 		while(iterator.hasNext()) {
 			User next = iterator.next();
 			if(next.getId().equals(Integer.parseInt(id))) {
+				System.out.println(next);
 				return next;
 			}
 		}
