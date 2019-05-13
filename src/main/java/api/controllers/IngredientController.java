@@ -84,11 +84,6 @@ public class IngredientController {
 		return toStore;
 	}
 
-	@RequestMapping(value = "/user/ingredient", method = RequestMethod.DELETE)
-	public void deleteIngredientByUser(@RequestParam String userId, @RequestParam String id) {
-		ingredientRepository.deleteById(Integer.parseInt(id));
-	}
-
 	@RequestMapping(value = "/ingredient", method = RequestMethod.DELETE)
 	public void deleteIngredient(@RequestParam String id) {
 		ingredientRepository.deleteById(Integer.parseInt(id));

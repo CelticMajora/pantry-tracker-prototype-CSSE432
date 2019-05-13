@@ -6,6 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Lists;
 
+import ui.models.FriendsWith;
 import ui.models.Ingredient;
 import ui.models.User;
 
@@ -68,6 +69,23 @@ public class API {
 				this.baseUrl, name, ownerId, experationYear, expirationMonth, expirationDayOfMonth);
 		Ingredient ingredient = restTemplate.postForObject(url, null, Ingredient.class);
 		return ingredient;
+	}
+
+	public void deleteIngredient(int id) {
+		String url = String.format("%s/ingredient?id=%d", this.baseUrl, id);
+		restTemplate.delete(url);
+	}
+
+	public List<User> getUsersFriends(int userId) {
+		String url = String.format("%s/friends?userId=%d", this.baseUrl, userId);
+		List<User> friends = restTemplate.getForObject(url, List.class);
+		return friends;
+	}
+
+	public List<FriendsWith> getAllFriends() {
+		String url = String.format("%s/friends/all", this.baseUrl);
+		List<FriendsWith> friendsWithList = restTemplate.getForObject(url, List.class);
+		return friendsWithList;
 	}
 
 }
