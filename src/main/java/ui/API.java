@@ -2,6 +2,9 @@ package ui;
 
 import java.util.List;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Lists;
@@ -35,7 +38,10 @@ public class API {
 
 	public List<User> getAllUsers() {
 		String url = String.format("%s/user/all", this.baseUrl);
-		Iterable<User> users = restTemplate.getForObject(url, Iterable.class);
+		ResponseEntity<Iterable<User>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<Iterable<User>>() {
+				});
+		Iterable<User> users = response.getBody();
 		return Lists.newLinkedList(users);
 	}
 
@@ -46,13 +52,19 @@ public class API {
 
 	public List<Ingredient> getUserIngredients(int userId) {
 		String url = String.format("%s/user/ingredient?userId=%d", this.baseUrl, userId);
-		List<Ingredient> userIngredients = restTemplate.getForObject(url, List.class);
+		ResponseEntity<List<Ingredient>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<Ingredient>>() {
+				});
+		List<Ingredient> userIngredients = response.getBody();
 		return userIngredients;
 	}
 
 	public List<Ingredient> getUserIngredientsExpiringSoon(int userId, String timezoneCode) {
 		String url = String.format("%s/user/ingredient?userId=%d&timezoneCode=%s", this.baseUrl, userId, timezoneCode);
-		List<Ingredient> userIngredientsExpiringSoon = restTemplate.getForObject(url, List.class);
+		ResponseEntity<List<Ingredient>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<Ingredient>>() {
+				});
+		List<Ingredient> userIngredientsExpiringSoon = response.getBody();
 		return userIngredientsExpiringSoon;
 	}
 
@@ -78,13 +90,19 @@ public class API {
 
 	public List<User> getUsersFriends(int userId) {
 		String url = String.format("%s/friends?userId=%d", this.baseUrl, userId);
-		List<User> friends = restTemplate.getForObject(url, List.class);
+		ResponseEntity<List<User>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<User>>() {
+				});
+		List<User> friends = response.getBody();
 		return friends;
 	}
 
 	public List<FriendsWith> getAllFriends() {
 		String url = String.format("%s/friends/all", this.baseUrl);
-		List<FriendsWith> friendsWithList = restTemplate.getForObject(url, List.class);
+		ResponseEntity<List<FriendsWith>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<FriendsWith>>() {
+				});
+		List<FriendsWith> friendsWithList = response.getBody();
 		return friendsWithList;
 	}
 
