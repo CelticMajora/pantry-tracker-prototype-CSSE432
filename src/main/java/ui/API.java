@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Lists;
 
+import ui.models.FriendRequestFor;
 import ui.models.FriendsWith;
 import ui.models.Ingredient;
 import ui.models.User;
@@ -26,14 +27,12 @@ public class API {
 
 	public User getUser(int id) {
 		String url = String.format("%s/user?id=%d", this.baseUrl, id);
-		User user = restTemplate.getForObject(url, User.class);
-		return user;
+		return restTemplate.getForObject(url, User.class);
 	}
 
 	public User postUser(String name) {
 		String url = String.format("%s/user?name=%s", this.baseUrl, name);
-		User user = restTemplate.postForObject(url, null, User.class);
-		return user;
+		return restTemplate.postForObject(url, null, User.class);
 	}
 
 	public List<User> getAllUsers() {
@@ -55,8 +54,7 @@ public class API {
 		ResponseEntity<List<Ingredient>> response = restTemplate.exchange(url, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Ingredient>>() {
 				});
-		List<Ingredient> userIngredients = response.getBody();
-		return userIngredients;
+		return response.getBody();
 	}
 
 	public List<Ingredient> getUserIngredientsExpiringSoon(int userId, String timezoneCode) {
@@ -64,14 +62,12 @@ public class API {
 		ResponseEntity<List<Ingredient>> response = restTemplate.exchange(url, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Ingredient>>() {
 				});
-		List<Ingredient> userIngredientsExpiringSoon = response.getBody();
-		return userIngredientsExpiringSoon;
+		return response.getBody();
 	}
 
 	public Ingredient getIngredient(int id) {
 		String url = String.format("%s/ingredient?id=%d", this.baseUrl, id);
-		Ingredient ingredient = restTemplate.getForObject(url, Ingredient.class);
-		return ingredient;
+		return restTemplate.getForObject(url, Ingredient.class);
 	}
 
 	public Ingredient postIngredient(String name, int ownerId, int experationYear, int expirationMonth,
@@ -79,8 +75,7 @@ public class API {
 		String url = String.format(
 				"%s/ingredient?name=%s&ownerId=%d&expirationYear=%d&expirationMonth=%d&expirationDayOfMonth=%d",
 				this.baseUrl, name, ownerId, experationYear, expirationMonth, expirationDayOfMonth);
-		Ingredient ingredient = restTemplate.postForObject(url, null, Ingredient.class);
-		return ingredient;
+		return restTemplate.postForObject(url, null, Ingredient.class);
 	}
 
 	public void deleteIngredient(int id) {
@@ -93,8 +88,7 @@ public class API {
 		ResponseEntity<List<User>> response = restTemplate.exchange(url, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<User>>() {
 				});
-		List<User> friends = response.getBody();
-		return friends;
+		return response.getBody();
 	}
 
 	public List<FriendsWith> getAllFriends() {
@@ -102,8 +96,46 @@ public class API {
 		ResponseEntity<List<FriendsWith>> response = restTemplate.exchange(url, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<FriendsWith>>() {
 				});
-		List<FriendsWith> friendsWithList = response.getBody();
-		return friendsWithList;
+		return response.getBody();
+	}
+
+	public List<FriendRequestFor> getAllFriendRequests() {
+		String url = String.format("%s/friend_requests/all", this.baseUrl);
+		ResponseEntity<List<FriendRequestFor>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<FriendRequestFor>>() {
+				});
+		return response.getBody();
+	}
+
+	public List<FriendRequestFor> getFriendRequestsReceived(int userId) {
+		String url = String.format("%s/friend_requests/received?userId=%d", this.baseUrl, userId);
+		ResponseEntity<List<FriendRequestFor>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<FriendRequestFor>>() {
+				});
+		return response.getBody();
+	}
+	
+	public List<FriendRequestFor> getFriendRequestsSent(int userId) {
+		String url = String.format("%s/friend_requests/sent?userId=%d", this.baseUrl, userId);
+		ResponseEntity<List<FriendRequestFor>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<FriendRequestFor>>() {
+				});
+		return response.getBody();
+	}
+	
+	public FriendRequestFor postFriendRequest(int userId, int friendId) {
+		String url = String.format("%s/friend_requests?userId=%d&friendId=%d", this.baseUrl, userId, friendId);
+		return restTemplate.postForObject(url, null, FriendRequestFor.class);
+	}
+	
+	public void acceptFriendRequest(int friendRequestId) {
+		String url = String.format("%s/friend_requests/accept?friendRequestId=%d", friendRequestId);
+		restTemplate.postForObject(url, null, String.class);
+	}
+	
+	public void rejectFriendRequest(int friendRequestId) {
+		String url = String.format("%s/friend_requests/reject?friendRequestId=%d", friendRequestId);
+		restTemplate.postForObject(url, null, String.class);
 	}
 
 }
