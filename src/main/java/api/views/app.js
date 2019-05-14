@@ -33,7 +33,6 @@ const app = {
 					{headers:new Headers({
 						'Access-Control-Allow-Origin': '*',
 					}),
-					
 					}).then((obj)=>obj.json())
 					.then(this.renderUser.bind(this))
 					.catch(function(error){
