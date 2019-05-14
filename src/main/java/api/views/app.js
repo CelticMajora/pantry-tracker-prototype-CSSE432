@@ -55,9 +55,34 @@ const app = {
 			console.log('name'+user.name);
 			
 			//render all friends
+			fetch(URL+'user/friends?id='+user.id,
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					}).then((obj)=>obj.json())
+					.then(this.renderAllFriends.bind(this))
+					.catch(function(error){
+						console.log(error);
+					});
 			
 			//get ingredients
 			//render all ingredients
+			fetch(URL+'user/ingredient?userId='+user.id,
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					}).then((obj)=>obj.json())
+					.then(this.renderAllIngredients.bind(this))
+					.catch(function(error){
+						console.log(error);
+					});
+		},
+		
+		//JSON list of ingredient objects
+		renderAllIngredients(ingredients){
+			for(const ingr of ingredients){
+				this.renderIngredient(ingr);
+			}
 		},
 		
 		//Ingredient ingredient (API object)
@@ -69,6 +94,13 @@ const app = {
 			item.id = `ingred-id-${ingredient.id}`;
 			//querySelect buttons and add listeners later (see MichaelBaywatch)
 			this.ingredients.insertBefore(item, this.ingredients.firstChild);
+		},
+		
+		//JSON list of user objects
+		renderAllFriends(users){
+			for(const usr of users){
+				this.renderFriend(usr);
+			}
 		},
 		
 		//User user (API object)
