@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import api.entities.User;
 import api.repositories.UserRepository;
 
-@CrossOrigin(origins = "127.0.0.1:8081/pantry.html")
+@CrossOrigin(origins = "http://127.0.0.1:8081")
 @RestController
 public class UserController {
 	@Autowired

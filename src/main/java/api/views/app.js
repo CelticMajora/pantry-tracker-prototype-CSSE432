@@ -26,11 +26,19 @@ const app = {
 		handleLogin(ev){
 			//get userID from form
 			//fill out the user object
+			ev.preventDefault();
 			console.log(ev.target.querySelector('.id').value);
+			console.log('run');
 			fetch(URL+'user?id='+ev.target.querySelector('.id').value,
-					{mode: "no-cors",
-					redirect:"follow",
-					}).then((response) => console.log(response.text())).then((data) => console.log(data));
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					
+					}).then((obj)=>obj.json())
+					.then(this.renderUser.bind(this))
+					.catch(function(error){
+						console.log(error);
+					});
 			
 			//ev.preventDefault();
 			//use fetch to do API calls
@@ -43,7 +51,9 @@ const app = {
 			//display user info?
 			
 			//get friends
-			
+			console.log(user);
+			console.log('id:'+user.id);
+			console.log('name'+user.name);
 			
 			//render all friends
 			

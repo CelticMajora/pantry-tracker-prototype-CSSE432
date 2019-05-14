@@ -15,7 +15,7 @@ import api.entities.Ingredient;
 import api.entities.Ingredient.IngredientPermissionLevel;
 import api.repositories.IngredientRepository;
 
-@CrossOrigin(origins = "127.0.0.1:8081/pantry.html")
+@CrossOrigin(origins = "http://127.0.0.1:8081")
 @RestController
 public class IngredientController {
 
