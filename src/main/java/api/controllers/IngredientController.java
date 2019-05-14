@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,12 +41,9 @@ public class IngredientController {
 	
 	@RequestMapping(value = "/ingredient", method = RequestMethod.GET)
 	public @ResponseBody Ingredient getIngredient(@RequestParam String id) {
-		Iterator<Ingredient> iterator = ingredientRepository.findAll().iterator();
-		while (iterator.hasNext()) {
-			Ingredient next = iterator.next();
-			if (next.getId().equals(Integer.parseInt(id))) {
-				return next;
-			}
+		Optional<Ingredient> ingredient = ingredientRepository.findById(Integer.parseInt(id));
+		if(ingredient.isPresent()) {
+			return ingredient.get();
 		}
 		throw new RuntimeException(String.format("Unable to find ingredient with id: %s", id));
 	}

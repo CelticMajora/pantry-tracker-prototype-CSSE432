@@ -1,66 +1,23 @@
-variables:
-  DOCKER_DRIVER: overlay
-  SPRING_PROFILES_ACTIVE: gitlab-ci
-
 stages:
   - build
-  - package
-  - deploy
+  - test
 
 gradle-build:
   stage: build
   script:
     - chmod +x ./gradlew
-    - ./gradlew build
+    - ./gradlew build -x test
   artifacts:
     paths:
       - build/libs/*.jar
+    expire_in: 1 week
 
-docker-build:
-  stage: package
-  image: docker:latest
-  services:
-    - docker:dind
+test:
+  stage: test
   script:
-  - docker build -t docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN docker.csse.rose-hulman.edu
-  - docker push docker.csse.rose-hulman.edu/donohoc1/pantry-tracker
-  tags:
-  - pantry-tracker
-  
-k8s-deploy-staging:
-  image: google/cloud-sdk
-  stage: deploy
-  script:
-  - echo "$GOOGLE_KEY" > key.json
-  - gcloud auth activate-service-account --key-file key.json
-  - gcloud config set compute/zone us-central1-a
-  - gcloud config set project pantry-tracker
-  - gcloud config set container/use_client_certificate True
-  - gcloud container clusters get-credentials pantry-tracker
-  - kubectl delete secret docker.csse.rose-hulman.edu
-  - kubectl create secret docker-registry docker.csse.rose-hulman.edu --docker-server=https://docker.csse.rose-hulman.edu --docker-username=donohoc1 --docker-password=$REGISTRY_PASSWD --docker-email=donohoc1@rose-hulman.edu
-  - kubectl apply -f deployment.yml --namespace=staging
-  environment:
-    name: staging
-    url: https://staging.pantry-tracker.com
-  only:
-  - master
-  
-k8s-deploy-production:
-  image: google/cloud-sdk
-  stage: deploy
-  script:
-  - echo "$GOOGLE_KEY" > key.json
-  - gcloud auth activate-service-account --key-file key.json
-  - gcloud config set compute/zone us-central1-a
-  - gcloud config set project pantry-tracker
-  - gcloud config set container/use_client_certificate True
-  - gcloud container clusters get-credentials pantry-tracker
-  - kubectl delete secret docker.csse.rose-hulman.edu
-  - kubectl create secret docker-registry docker.csse.rose-hulman.edu --docker-server=https://docker.csse.rose-hulman.edu --docker-username=donohoc1 --docker-password=$REGISTRY_PASSWD --docker-email=donohoc1@rose-hulman.edu
-  - kubectl apply -f deployment.yml --namespace=production
-  environment:
-    name: production
-    url: https://production.pantry-tracker.com
-  when: manual
+    - chmod +x ./gradlew
+    - ./gradlew test
+  artifacts:
+    when: on_failure
+    untracked: true
+    expire_in: 1 week
