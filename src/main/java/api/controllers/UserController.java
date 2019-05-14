@@ -76,7 +76,7 @@ public class UserController {
 		User toStore = new User();
 		toStore.setName(name);
 		userRepository.save(toStore);
-		return "Saved";
+		return ""+toStore.getId();
 	}
 	
 	@RequestMapping(value = "/user/all", method = RequestMethod.GET)
