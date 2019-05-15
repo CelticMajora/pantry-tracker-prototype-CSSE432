@@ -47,9 +47,7 @@ public class IngredientController {
 			Ingredient next = iterator.next();
 			if (next.getOwnerId().equals(Integer.parseInt(userId))) {
 				LocalDate now = LocalDate.now(ZoneId.of(timezoneCode));
-				long duration1 = now.until(next.getExpirationDate(), ChronoUnit.DAYS);
-				long duration2 = ChronoUnit.DAYS.between(now, next.getExpirationDate());
-				if(duration1 < 4) {
+				if(now.until(next.getExpirationDate(), ChronoUnit.DAYS) < 4) {
 					ingredients.add(next);
 				}				
 			}
