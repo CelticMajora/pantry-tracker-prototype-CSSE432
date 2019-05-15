@@ -153,14 +153,14 @@ public class UI {
 		while (true) {
 			System.out.println(String.format("Pick a request number to reject: 0-%d", receivedUsers.size() - 1));
 			requestIndex = this.scan.nextInt();
-			if(requestIndex >= 0 && requestIndex < receivedUsers.size()) {
+			if (requestIndex >= 0 && requestIndex < receivedUsers.size()) {
 				break;
 			}
 			System.out.println("The number you chose was invalid");
 		}
-		
-		for(FriendRequestFor rec : received) {
-			if(rec.getUserId() == receivedUsers.get(requestIndex).getId()) {
+
+		for (FriendRequestFor rec : received) {
+			if (rec.getUserId() == receivedUsers.get(requestIndex).getId()) {
 				api.rejectFriendRequest(rec.getId());
 				break;
 			}
@@ -188,14 +188,14 @@ public class UI {
 		while (true) {
 			System.out.println(String.format("Pick a request number to accept: 0-%d", receivedUsers.size() - 1));
 			requestIndex = this.scan.nextInt();
-			if(requestIndex >= 0 && requestIndex < receivedUsers.size()) {
+			if (requestIndex >= 0 && requestIndex < receivedUsers.size()) {
 				break;
 			}
 			System.out.println("The number you chose was invalid");
 		}
-		
-		for(FriendRequestFor rec : received) {
-			if(rec.getUserId() == receivedUsers.get(requestIndex).getId()) {
+
+		for (FriendRequestFor rec : received) {
+			if (rec.getUserId() == receivedUsers.get(requestIndex).getId()) {
 				api.acceptFriendRequest(rec.getId());
 				break;
 			}
