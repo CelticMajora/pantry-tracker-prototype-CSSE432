@@ -13,6 +13,7 @@ const app = {
 			this.loginForm = document.querySelector(selectors.loginFormSelector);
 			if(this.loginForm !== null){
 				this.loginForm.addEventListener('submit', this.handleLogin.bind(this));
+				this.loginForm.querySelector(".delete").addEventListener('click', this.deleteUser.bind(this));
 			}else{
 				console.log('loginForm not found');
 			}
@@ -39,14 +40,28 @@ const app = {
 						console.log(error);
 					});
 			
-			//ev.preventDefault();
-			//use fetch to do API calls
-			
 		},
 		
 		//event ev
 		sendFriendRequest(ev){
 		},
+		
+		
+		deleteUser(ev){
+			ev.preventDefault();
+			const id = ev.target.parentElement.querySelector(".id").value;
+			
+			fetch(URL+'user?id='+id,
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					method:'DELETE',
+					})
+					.catch(function(error){
+						console.log(error);
+					});
+		},
+		
 		
 		//event ev
 		addUser(ev){
@@ -55,7 +70,7 @@ const app = {
 //					{headers:new Headers({
 //						'Access-Control-Allow-Origin': '*',
 //					}),
-//					method:'post',
+//					method:'POST',
 //					}).then((obj)=>obj.json())
 //					.then(function(obj) = {
 //						console.log(obj);
@@ -158,7 +173,8 @@ const app = {
 			const item = document.querySelector('#ingredientList li.template').cloneNode(true);
 			item.classList.remove('template');
 			item.querySelector('.name').textContent = ingredient.name;
-			item.querySelector('.id') = ingredient.id;
+			item.querySelector('.id').textContent = ingredient.id;
+			item.querySelector('.date').textContent = ingredient. expirationDate
 			
 			this.ingredients.insertBefore(item, this.ingredients.firstChild);
 		},
