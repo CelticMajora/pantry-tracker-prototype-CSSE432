@@ -107,6 +107,8 @@ public class UI {
 				this.displayLoggedInUserInformation();
 			} else if (command.equals("view-friend-profile")) {
 				this.viewFriendProfile();
+			} else if (command.equals("request-friend")) {
+				this.requestFriend();
 			} else if (command.equals("delete-account")) {
 				api.deleteUser(this.user.get().getId());
 				this.user = Optional.empty();
@@ -126,6 +128,53 @@ public class UI {
 		}
 	}
 
+	private void requestFriend() {
+		List<User> allUsers = api.getAllUsers();
+		List<User> usersFriends = api.getUsersFriends(this.user.get().getId());
+		List<FriendRequestFor> requestsSent = api.getFriendRequestsSent(this.user.get().getId());
+		List<FriendRequestFor> requestsReceived = api.getFriendRequestsReceived(this.user.get().getId());
+
+		List<User> validUsers = new LinkedList<User>();
+		for (User possibleUser : allUsers) {
+			boolean shouldAdd = true;
+			for (User currentFriend : usersFriends) {
+				if (possibleUser.getId() == currentFriend.getId()) {
+					shouldAdd = false;
+				}
+			}
+			for (FriendRequestFor sent : requestsSent) {
+				if (possibleUser.getId() == sent.getUserId()) {
+					shouldAdd = false;
+				}
+			}
+			for (FriendRequestFor received : requestsReceived) {
+				if (possibleUser.getId() == received.getFriendRequestedId()) {
+					shouldAdd = false;
+				}
+			}
+			if (shouldAdd) {
+				validUsers.add(possibleUser);
+			}
+		}
+		
+		System.out.println("Possible Friend Options");
+		for(int i = 0; i < validUsers.size(); i++) {
+			System.out.println(String.format("%d:  %s", i, validUsers.get(i).getName()));
+		}
+		
+		int requestIndex;
+		while(true) {
+			System.out.println(String.format("Request a friend by number: 0-%d", validUsers.size() - 1));
+			requestIndex = this.scan.nextInt();
+			if(requestIndex >= 0 && requestIndex < validUsers.size()) {
+				break;
+			}
+			System.out.println("The number you chose was invalid");
+		}
+		
+		api.postFriendRequest(this.user.get().getId(), validUsers.get(requestIndex).getId());
+	}
+
 	private void deleteUserIngredient() {
 		List<Ingredient> userIngredients = this.api.getUserIngredients(this.user.get().getId());
 		System.out.println("All Ingredients:");
@@ -135,15 +184,16 @@ public class UI {
 					userIngredients.get(i).getIngredientPermissionLevel()));
 		}
 		int ingredientIndex = 0;
-		while(true) {
-			System.out.println(String.format("Please choose an ingredient number to delete: 0-%d", userIngredients.size() - 1));
+		while (true) {
+			System.out.println(
+					String.format("Please choose an ingredient number to delete: 0-%d", userIngredients.size() - 1));
 			ingredientIndex = this.scan.nextInt();
-			if(ingredientIndex >= 0 && ingredientIndex < userIngredients.size()) {
+			if (ingredientIndex >= 0 && ingredientIndex < userIngredients.size()) {
 				break;
 			}
 			System.out.println("The number you chose was invalid");
 		}
-		
+
 		api.deleteIngredient(userIngredients.get(ingredientIndex).getId());
 	}
 
