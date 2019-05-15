@@ -109,6 +109,10 @@ public class UI {
 				this.viewFriendProfile();
 			} else if (command.equals("request-friend")) {
 				this.requestFriend();
+			} else if (command.equals("accept-request")) {
+				this.acceptRequest();
+			} else if (command.equals("reject-request")) {
+				this.rejectRequest();
 			} else if (command.equals("delete-account")) {
 				api.deleteUser(this.user.get().getId());
 				this.user = Optional.empty();
@@ -124,6 +128,76 @@ public class UI {
 				this.login();
 			} else {
 				System.out.println("Command not recognized. Type \"help\" to see a list of commands");
+			}
+		}
+	}
+
+	private void rejectRequest() {
+		List<FriendRequestFor> received = api.getFriendRequestsReceived(this.user.get().getId());
+		if (received.isEmpty()) {
+			System.out.println("No friend requests");
+			return;
+		}
+
+		List<User> receivedUsers = new LinkedList<User>();
+		for (FriendRequestFor rec : received) {
+			receivedUsers.add(api.getUser(rec.getFriendRequestedId()));
+		}
+
+		System.out.println("Pending Friend Requests");
+		for (int i = 0; i < receivedUsers.size(); i++) {
+			System.out.println(String.format("%d:  %s", i, receivedUsers.get(i).getName()));
+		}
+
+		int requestIndex = 0;
+		while (true) {
+			System.out.println(String.format("Pick a request number to reject: 0-%d", receivedUsers.size() - 1));
+			requestIndex = this.scan.nextInt();
+			if(requestIndex >= 0 && requestIndex < receivedUsers.size()) {
+				break;
+			}
+			System.out.println("The number you chose was invalid");
+		}
+		
+		for(FriendRequestFor rec : received) {
+			if(rec.getFriendRequestedId() == receivedUsers.get(requestIndex).getId()) {
+				api.rejectFriendRequest(rec.getId());
+				break;
+			}
+		}
+	}
+
+	private void acceptRequest() {
+		List<FriendRequestFor> received = api.getFriendRequestsReceived(this.user.get().getId());
+		if (received.isEmpty()) {
+			System.out.println("No friend requests");
+			return;
+		}
+
+		List<User> receivedUsers = new LinkedList<User>();
+		for (FriendRequestFor rec : received) {
+			receivedUsers.add(api.getUser(rec.getFriendRequestedId()));
+		}
+
+		System.out.println("Pending Friend Requests");
+		for (int i = 0; i < receivedUsers.size(); i++) {
+			System.out.println(String.format("%d:  %s", i, receivedUsers.get(i).getName()));
+		}
+
+		int requestIndex = 0;
+		while (true) {
+			System.out.println(String.format("Pick a request number to accept: 0-%d", receivedUsers.size() - 1));
+			requestIndex = this.scan.nextInt();
+			if(requestIndex >= 0 && requestIndex < receivedUsers.size()) {
+				break;
+			}
+			System.out.println("The number you chose was invalid");
+		}
+		
+		for(FriendRequestFor rec : received) {
+			if(rec.getFriendRequestedId() == receivedUsers.get(requestIndex).getId()) {
+				api.acceptFriendRequest(rec.getId());
+				break;
 			}
 		}
 	}
@@ -156,22 +230,27 @@ public class UI {
 				validUsers.add(possibleUser);
 			}
 		}
-		
+
+		if (validUsers.isEmpty()) {
+			System.out.println("No friend options");
+			return;
+		}
+
 		System.out.println("Possible Friend Options");
-		for(int i = 0; i < validUsers.size(); i++) {
+		for (int i = 0; i < validUsers.size(); i++) {
 			System.out.println(String.format("%d:  %s", i, validUsers.get(i).getName()));
 		}
-		
+
 		int requestIndex;
-		while(true) {
+		while (true) {
 			System.out.println(String.format("Request a friend by number: 0-%d", validUsers.size() - 1));
 			requestIndex = this.scan.nextInt();
-			if(requestIndex >= 0 && requestIndex < validUsers.size()) {
+			if (requestIndex >= 0 && requestIndex < validUsers.size()) {
 				break;
 			}
 			System.out.println("The number you chose was invalid");
 		}
-		
+
 		api.postFriendRequest(this.user.get().getId(), validUsers.get(requestIndex).getId());
 	}
 
@@ -256,6 +335,11 @@ public class UI {
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.out.println("Help Table");
 		System.out.println("save-ingredient   -   Save a new ingredient");
+		System.out.println("request-friend   -   Create a new friend request");
+		System.out.println("accept-request   -   Accept a pending friend request");
+		System.out.println("reject-request   -   Reject a pending friend request");
+		System.out.println("delete-account   -   Delete your account");
+		System.out.println("delete-ingredient   -   Delete a specific ingredient");
 		System.out.println("quit   -   Close out of the program");
 		System.out.println("view-profile   -   View your profile");
 		System.out.println("view-friend-profile   -   View a friend's profile");

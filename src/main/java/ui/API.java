@@ -70,11 +70,11 @@ public class API {
 		return restTemplate.getForObject(url, Ingredient.class);
 	}
 
-	public Ingredient postIngredient(String name, int ownerId, int experationYear, int expirationMonth,
+	public Ingredient postIngredient(String name, int ownerId, int expirationYear, int expirationMonth,
 			int expirationDayOfMonth) {
 		String url = String.format(
 				"%s/ingredient?name=%s&ownerId=%d&expirationYear=%d&expirationMonth=%d&expirationDayOfMonth=%d",
-				this.baseUrl, name, ownerId, experationYear, expirationMonth, expirationDayOfMonth);
+				this.baseUrl, name, ownerId, expirationYear, expirationMonth, expirationDayOfMonth);
 		return restTemplate.postForObject(url, null, Ingredient.class);
 	}
 
