@@ -8,7 +8,8 @@ const app = {
 		
 		//defined at bottom of page
 		init(selectors){
-			this.user = -1;
+			this.user = {name:'default',
+					id:'1'};
 			
 			this.loginForm = document.querySelector(selectors.loginFormSelector);
 			if(this.loginForm !== null){
@@ -21,6 +22,7 @@ const app = {
 			this.ingredients = document.querySelector(selectors.ingredientsSelector);
 			
 			this.friends = document.querySelector(selectors.friendsSelector);
+			this.friendRequests = document.querySelector(selectors.friendRequestSelector);
 		},
 		
 		//event ev 
@@ -65,16 +67,13 @@ const app = {
 		
 		//event ev
 		addUser(ev){
-//			ev.preventDefault();
+			ev.preventDefault();
 //			fetch(URL+'user/?name='+ev.target.querySelector('.name').value,
 //					{headers:new Headers({
 //						'Access-Control-Allow-Origin': '*',
 //					}),
 //					method:'POST',
 //					}).then((obj)=>obj.json())
-//					.then(function(obj) = {
-//						console.log(obj);
-//					})
 //					.catch(function(error){
 //						console.log(error);
 //					});
@@ -89,13 +88,33 @@ const app = {
 		//event ev
 		acceptFriendRequest(ev){
 			ev.preventDefault();
-			ev.target.parentElement;
+			
+			fetch(URL+'friend_requests/accept?friendRequestId='+ev.target.parentElement.querySelector(".id").value,
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					method:'POST',
+					}).catch(function(error){
+						console.log(error);
+					});
+			
+			renderUser(this.user);
 		},
 		
 		//event ev
 		rejectFriendRequest(ev){
 			ev.preventDefault();
-			ev.target.parentElement;
+			
+			fetch(URL+'friend_requests/reject?friendRequestId='+ev.target.parentElement.querySelector(".id").value,
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					method:'POST',
+					}).catch(function(error){
+						console.log(error);
+					});
+			
+			renderUser(this.user);
 		},
 		
 		//handles filling in the page for that users data
@@ -106,7 +125,7 @@ const app = {
 			//get friends
 			console.log(user);
 			console.log('id:'+user.id);
-			console.log('name'+user.name);
+			console.log('name:'+user.name);
 			
 			//render all friends
 			fetch(URL+'user/friends?id='+user.id,
@@ -156,9 +175,11 @@ const app = {
 			
 			item.querySelector('.userId').textContent = request.userId;
 			item.querySelector('.id').textContent = request.id;
+			//TODO
 			item.querySelector('.accept').addEvenListener('click', this.acceptFriendRequest.bind(this));
 			item.querySelector('.reject').addEvenListener('click', this.rejectFriendRequest.bind(this));
 			
+			this.friendRequests.insertBefore(item, this.friendRequests.firstChild);
 		},
 		
 		//JSON list of ingredient objects
@@ -175,8 +196,23 @@ const app = {
 			item.querySelector('.name').textContent = ingredient.name;
 			item.querySelector('.id').textContent = ingredient.id;
 			item.querySelector('.date').textContent = ingredient. expirationDate
+			//TODO
+			//item.querySelector('.delete').addActionListener(this.deleteIngredient.bind(this));
 			
 			this.ingredients.insertBefore(item, this.ingredients.firstChild);
+		},
+		
+		deleteIngredient(ev){
+			ev.preventDefault();
+			
+			fetch(URL+'ingredient?id='+ev.target.parentElement.querySelector(".id").value,
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					method:'DELETE',
+					}).catch(function(error){
+						console.log(error);
+					});
 		},
 		
 		//JSON list of user objects
@@ -205,4 +241,5 @@ app.init({
 	loginFormSelector: "form.login",
 	ingredientsSelector: "#ingredientList li",
 	friendsSelector: "#friendsList li",
+	friendRequestSelector: "#friendRequest li",
 })
