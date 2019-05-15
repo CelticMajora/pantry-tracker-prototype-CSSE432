@@ -68,7 +68,7 @@ public class IngredientController {
 		return ingredientRepository.findAll();
 	}
 
-	@RequestMapping(value = "/user/ingredient", method = RequestMethod.POST)
+	@RequestMapping(value = "/ingredient", method = RequestMethod.POST)
 	public @ResponseBody Ingredient postIngredient(@RequestParam String name, @RequestParam String ownerId,
 			@RequestParam String expirationYear, @RequestParam String expirationMonth,
 			@RequestParam String expirationDayOfMonth) {

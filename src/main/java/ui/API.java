@@ -129,12 +129,12 @@ public class API {
 	}
 	
 	public void acceptFriendRequest(int friendRequestId) {
-		String url = String.format("%s/friend_requests/accept?friendRequestId=%d", friendRequestId);
+		String url = String.format("%s/friend_requests/accept?friendRequestId=%d", this.baseUrl, friendRequestId);
 		restTemplate.postForObject(url, null, String.class);
 	}
 	
 	public void rejectFriendRequest(int friendRequestId) {
-		String url = String.format("%s/friend_requests/reject?friendRequestId=%d", friendRequestId);
+		String url = String.format("%s/friend_requests/reject?friendRequestId=%d", this.baseUrl, friendRequestId);
 		restTemplate.postForObject(url, null, String.class);
 	}
 
