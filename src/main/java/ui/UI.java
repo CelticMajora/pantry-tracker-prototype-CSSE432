@@ -1,5 +1,6 @@
 package ui;
 
+import java.time.Month;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -78,22 +79,137 @@ public class UI {
 		System.out.println("All Ingredients:");
 		for (int i = 0; i < userIngredients.size(); i++) {
 			System.out.println(String.format("%d:  %s  -  Expiring: %s  Permission Level: %s", i,
-					userIngredients.get(i).getName(),
-					userIngredients.get(i).getExpirationDate().toString(),
+					userIngredients.get(i).getName(), userIngredients.get(i).getExpirationDate().toString(),
 					userIngredients.get(i).getIngredientPermissionLevel()));
 		}
 		System.out.println("Friend List:");
-		for(int i = 0; i < userFriends.size(); i++) {
+		for (int i = 0; i < userFriends.size(); i++) {
 			System.out.println(String.format("%d:  %s", i, userFriends.get(i).getName()));
 		}
 		System.out.println("Friend Requests Received:");
-		for(int i = 0; i < friendRequestsReceivedUsers.size(); i++) {
+		for (int i = 0; i < friendRequestsReceivedUsers.size(); i++) {
 			System.out.println(String.format("%d:  %s", i, friendRequestsReceivedUsers.get(i).getName()));
 		}
 		System.out.println("Friend Requests Sent:");
-		for(int i = 0; i < friendRequestsSentUsers.size(); i++) {
+		for (int i = 0; i < friendRequestsSentUsers.size(); i++) {
 			System.out.println(String.format("%d:  %s", i, friendRequestsSentUsers.get(i).getName()));
 		}
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	}
+
+	public void runCommands() {
+		while (true) {
+			System.out.println("Enter a command(type help to get a description of all commands)");
+			String command = this.scan.nextLine();
+			if (command.equals("save-ingredient")) {
+				this.saveIngredient();
+			} else if (command.equals("view-profile")) {
+				this.displayLoggedInUserInformation();
+			} else if (command.equals("view-friend-profile")) {
+				this.viewFriendProfile();
+			} else if (command.equals("delete-account")) {
+				api.deleteUser(this.user.get().getId());
+				this.user = Optional.empty();
+				this.login();
+			} else if (command.equals("delete-ingredient")) {
+				this.deleteUserIngredient();
+			} else if (command.equals("help")) {
+				this.displayHelpScreen();
+			} else if (command.equals("quit")) {
+				break;
+			} else if (command.equals("logout")) {
+				this.user = Optional.empty();
+				this.login();
+			} else {
+				System.out.println("Command not recognized. Type \"help\" to see a list of commands");
+			}
+		}
+	}
+
+	private void deleteUserIngredient() {
+		List<Ingredient> userIngredients = this.api.getUserIngredients(this.user.get().getId());
+		System.out.println("All Ingredients:");
+		for (int i = 0; i < userIngredients.size(); i++) {
+			System.out.println(String.format("%d:  %s  -  Expiring: %s  Permission Level: %s", i,
+					userIngredients.get(i).getName(), userIngredients.get(i).getExpirationDate().toString(),
+					userIngredients.get(i).getIngredientPermissionLevel()));
+		}
+		int ingredientIndex = 0;
+		while(true) {
+			System.out.println(String.format("Please choose an ingredient number to delete: 0-%d", userIngredients.size() - 1));
+			ingredientIndex = this.scan.nextInt();
+			if(ingredientIndex >= 0 && ingredientIndex < userIngredients.size()) {
+				break;
+			}
+			System.out.println("The number you chose was invalid");
+		}
+		
+		api.deleteIngredient(userIngredients.get(ingredientIndex).getId());
+	}
+
+	private void saveIngredient() {
+		System.out.println("Save a New Ingredient");
+		System.out.println("Enter an ingredient name:");
+		String name = this.scan.nextLine();
+		int month = 1;
+		int dayOfMonth = 1;
+		System.out.println("Please enter a expiration year");
+		int year = this.scan.nextInt();
+		while (true) {
+			System.out.println("Please enter a month between 1 and 12");
+			month = this.scan.nextInt();
+			if (month > 0 && month < 13) {
+				break;
+			}
+			System.out.println("Your input month is invalid.");
+		}
+		int numDays = Month.of(month).maxLength();
+		while (true) {
+			System.out.println(String.format("Please enter a day of month between 1 and %d", numDays));
+			dayOfMonth = this.scan.nextInt();
+			if (month > 0 && month <= numDays) {
+				break;
+			}
+			System.out.println("Your input day of month is invalid.");
+		}
+		this.api.postIngredient(name, this.user.get().getId(), year, month, dayOfMonth);
+	}
+
+	private void viewFriendProfile() {
+		List<User> userFriends = this.api.getUsersFriends(this.user.get().getId());
+		if (userFriends.isEmpty()) {
+			System.out.println("You have not found any friends yet.");
+			return;
+		}
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println("Friend List:");
+		for (int i = 0; i < userFriends.size(); i++) {
+			System.out.println(String.format("%d:  %s", i, userFriends.get(i).getName()));
+		}
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+		int friendIndex = 0;
+		while (true) {
+			System.out.println(String.format("Please choose a friend number to view: 0-%d", userFriends.size() - 1));
+			friendIndex = this.scan.nextInt();
+			if (friendIndex < 0 || friendIndex >= userFriends.size()) {
+				System.out.println("The chosen number was invalid");
+			} else {
+				break;
+			}
+		}
+
+		this.displayUserInformation(userFriends.get(friendIndex));
+	}
+
+	private void displayHelpScreen() {
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println("Help Table");
+		System.out.println("save-ingredient   -   Save a new ingredient");
+		System.out.println("quit   -   Close out of the program");
+		System.out.println("view-profile   -   View your profile");
+		System.out.println("view-friend-profile   -   View a friend's profile");
+		System.out.println("logout   -   Logout of your profile");
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}
 

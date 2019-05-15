@@ -14,6 +14,7 @@ public class Main {
 		UI ui = new UI(api);
 		ui.login();
 		ui.displayLoggedInUserInformation();
+		ui.runCommands();
 	}
 
 }
