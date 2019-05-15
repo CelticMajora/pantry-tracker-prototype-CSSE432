@@ -68,7 +68,7 @@ public class IngredientController {
 		return ingredientRepository.findAll();
 	}
 
-	@RequestMapping(value = "/user/ingredient", method = RequestMethod.POST)
+	@RequestMapping(value = "/ingredient", method = RequestMethod.POST)
 	public @ResponseBody Ingredient postIngredient(@RequestParam String name, @RequestParam String ownerId,
 			@RequestParam String expirationYear, @RequestParam String expirationMonth,
 			@RequestParam String expirationDayOfMonth) {
@@ -80,11 +80,6 @@ public class IngredientController {
 		toStore.setIngredientPermissionLevel(IngredientPermissionLevel.NOT_UP_FOR_GRABS);
 		ingredientRepository.save(toStore);
 		return toStore;
-	}
-
-	@RequestMapping(value = "/user/ingredient", method = RequestMethod.DELETE)
-	public void deleteIngredientByUser(@RequestParam String userId, @RequestParam String id) {
-		ingredientRepository.deleteById(Integer.parseInt(id));
 	}
 
 	@RequestMapping(value = "/ingredient", method = RequestMethod.DELETE)
