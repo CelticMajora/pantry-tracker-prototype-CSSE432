@@ -160,7 +160,7 @@ public class UI {
 		}
 		
 		for(FriendRequestFor rec : received) {
-			if(rec.getFriendRequestedId() == receivedUsers.get(requestIndex).getId()) {
+			if(rec.getUserId() == receivedUsers.get(requestIndex).getId()) {
 				api.rejectFriendRequest(rec.getId());
 				break;
 			}
@@ -195,7 +195,7 @@ public class UI {
 		}
 		
 		for(FriendRequestFor rec : received) {
-			if(rec.getFriendRequestedId() == receivedUsers.get(requestIndex).getId()) {
+			if(rec.getUserId() == receivedUsers.get(requestIndex).getId()) {
 				api.acceptFriendRequest(rec.getId());
 				break;
 			}
