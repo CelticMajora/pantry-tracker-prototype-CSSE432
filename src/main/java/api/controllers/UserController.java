@@ -72,11 +72,11 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	public @ResponseBody String postUser(@RequestParam String name) {
+	public @ResponseBody User postUser(@RequestParam String name) {
 		User toStore = new User();
 		toStore.setName(name);
 		userRepository.save(toStore);
-		return ""+toStore.getId();
+		return toStore;
 	}
 	
 	@RequestMapping(value = "/user/all", method = RequestMethod.GET)

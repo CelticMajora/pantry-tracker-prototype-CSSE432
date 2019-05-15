@@ -15,6 +15,7 @@ const app = {
 			if(this.loginForm !== null){
 				this.loginForm.addEventListener('submit', this.handleLogin.bind(this));
 				this.loginForm.querySelector(".delete").addEventListener('click', this.deleteUser.bind(this));
+				this.loginForm.querySelector(".add").addEventListener('click', this.addUser.bind(this));
 			}else{
 				console.log('loginForm not found');
 			}
@@ -68,19 +69,23 @@ const app = {
 		//event ev
 		addUser(ev){
 			ev.preventDefault();
-//			fetch(URL+'user/?name='+ev.target.querySelector('.name').value,
-//					{headers:new Headers({
-//						'Access-Control-Allow-Origin': '*',
-//					}),
-//					method:'POST',
-//					}).then((obj)=>obj.json())
-//					.catch(function(error){
-//						console.log(error);
-//					});
+			fetch(URL+'user/?name='+ev.target.parentElement.querySelector('.id').value ,
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					method:'POST',
+					}).then((res)=> res.json()).then(this.newUser.bind(this))
+					.catch(function(error){
+						console.log(error);
+					});
 			
+			
+		},
+		
+		newUser(response){
 			const user = {
-					id:'get id from post response',
-					name:ev.target.querySelector('.name').value,
+					id:response.id,
+					name:response.name,
 			}
 			this.renderUser(user);
 		},
@@ -126,6 +131,8 @@ const app = {
 			console.log(user);
 			console.log('id:'+user.id);
 			console.log('name:'+user.name);
+			
+			this.loginForm.querySelector('.id').value = user.id;
 			
 			//render all friends
 			fetch(URL+'user/friends?id='+user.id,
