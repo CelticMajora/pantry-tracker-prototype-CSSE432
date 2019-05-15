@@ -141,7 +141,7 @@ public class UI {
 
 		List<User> receivedUsers = new LinkedList<User>();
 		for (FriendRequestFor rec : received) {
-			receivedUsers.add(api.getUser(rec.getFriendRequestedId()));
+			receivedUsers.add(api.getUser(rec.getUserId()));
 		}
 
 		System.out.println("Pending Friend Requests");
@@ -176,7 +176,7 @@ public class UI {
 
 		List<User> receivedUsers = new LinkedList<User>();
 		for (FriendRequestFor rec : received) {
-			receivedUsers.add(api.getUser(rec.getFriendRequestedId()));
+			receivedUsers.add(api.getUser(rec.getUserId()));
 		}
 
 		System.out.println("Pending Friend Requests");
