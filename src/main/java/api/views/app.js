@@ -137,6 +137,8 @@ const app = {
 						console.log(error);
 					});
 			
+			this.removeElement(ev.target.parentElement);
+			
 			renderUser(this.user);
 		},
 		
@@ -152,7 +154,7 @@ const app = {
 					}).catch(function(error){
 						console.log(error);
 					});
-			
+			this.removeElement(ev.target.parentElement);
 			renderUser(this.user);
 		},
 		
@@ -253,6 +255,8 @@ const app = {
 					}).catch(function(error){
 						console.log(error);
 					});
+			
+			this.removeElement(ev.target.parentElement);
 		},
 		
 		//JSON list of user objects
@@ -270,6 +274,10 @@ const app = {
 			item.querySelector('.userID').textContent = user.ID;
 			
 			this.friends.insertBefore(item, this.friends.firstChild);
+		},
+		
+		removeElement(elem){
+			elem.parentNode.removeChile(elem);
 		},
 		
 		
