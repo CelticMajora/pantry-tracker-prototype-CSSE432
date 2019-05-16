@@ -58,7 +58,7 @@ public class API {
 	}
 
 	public List<Ingredient> getUserIngredientsExpiringSoon(int userId, String timezoneCode) {
-		String url = String.format("%s/user/ingredient?userId=%d&timezoneCode=%s", this.baseUrl, userId, timezoneCode);
+		String url = String.format("%s/user/ingredient/expiring_soon?userId=%d&timezoneCode=%s", this.baseUrl, userId, timezoneCode);
 		ResponseEntity<List<Ingredient>> response = restTemplate.exchange(url, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Ingredient>>() {
 				});
