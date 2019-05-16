@@ -2,10 +2,7 @@ package api.controllers;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-<<<<<<< src/main/java/api/controllers/IngredientController.java
-=======
 import java.time.temporal.ChronoUnit;
->>>>>>> src/main/java/api/controllers/IngredientController.java
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -52,11 +49,7 @@ public class IngredientController {
 			Ingredient next = iterator.next();
 			if (next.getOwnerId().equals(Integer.parseInt(userId))) {
 				LocalDate now = LocalDate.now(ZoneId.of(timezoneCode));
-<<<<<<< src/main/java/api/controllers/IngredientController.java
-				if(now.until(next.getExpirationDate()).getDays() < 4) {
-=======
 				if(now.until(next.getExpirationDate(), ChronoUnit.DAYS) < 4) {
->>>>>>> src/main/java/api/controllers/IngredientController.java
 					ingredients.add(next);
 				}				
 			}
