@@ -17,10 +17,9 @@
   <!-- Custom fonts for this template -->
   <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
 
-  <!-- Custom styles for this template -->
-  <link href="css/resume.min.css" rel="stylesheet">
+
+  
 
 </head>
 
@@ -104,7 +103,28 @@
             <span class="text-primary"></span>
           </div>
         </div>
-
+        
+        
+        <form class="ingredient">
+        <input class="name" type=text>
+        <input class="month" type=text placeholder="MM">
+        <span>/</span>
+        <input class="day" type="text" placeholder="DD">
+        <span>/</span>
+        <input class="year" type=text placeholder="YYYY"><br>
+        <input type="Submit" value="Add Ingredient">
+        </form>
+        
+		<ul id="ingredientList">
+        <li class="ingredient template">
+                        <span class="id">IngredientID</span>
+                         <span class="name">Name</span>
+                         <span class="date">Expiration Date</span>
+                         
+                            <button class="delete button alert">🗑️</button>
+                    </li>
+                    </ul>
+                    
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
             <h3 class="mb-0"></h3>
@@ -148,6 +168,27 @@
             <span class="text-primary"></span>
           </div>
         </div>
+        
+        <form class="friend">
+        <input class="name" type="text">
+        <input type="Submit" value="Add Friend by ID">
+        </form>
+        
+        <ul id="friendsList">
+        <li class="friend template">
+                        <span class="userID">UserID</span>
+                         <span class="name">Name</span>
+                    </li>
+                    </ul>
+                    
+        <ul id="friendRequests">
+        <li class="friendRequest template">
+                        <span class="userID">UserID</span>
+                        <span class="id">RequestID</span>
+                        <button class="accept button">accept</button>
+                        <button class="reject button alert">🗑️</button>
+                    </li>
+                    </ul>
 
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between">
           <div class="resume-content">
@@ -168,7 +209,13 @@
     <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="profile">
       <div class="w-100">
         <h2 class="mb-5">My Profile</h2>
-
+			<form class="login">
+				<span class="name">User ID:</span><br>
+				<input class="id" type="text" name="ID"><br>
+				<input type="Submit" value="Submit">
+				<input class="delete" type="button" value="Delete">
+				<input class="add" type="button" value="Add">
+			</form>
         
     </section>
 
@@ -178,16 +225,10 @@
 
   </div>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for this template -->
-  <script src="js/resume.min.js"></script>
+  
 
 </body>
+
+  <script src="app.js"></script>
 
 </html>
