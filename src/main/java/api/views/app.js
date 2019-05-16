@@ -24,6 +24,12 @@ const app = {
 			
 			this.friends = document.querySelector(selectors.friendsSelector);
 			this.friendRequests = document.querySelector(selectors.friendRequestSelector);
+			
+			this.addIngredientForm = document.querySelector("form.ingredient");
+			this.addIngredientForm.addEventListener('submit', this.addIngredient.bind(this));
+			
+			this.addFriendForm = document.querySelector("form.friend");
+			this.addFriendForm.addEventListener('submit',this.sendFriendRequest.bind(this));
 		},
 		
 		//event ev 
@@ -32,7 +38,6 @@ const app = {
 			//fill out the user object
 			ev.preventDefault();
 			console.log(ev.target.querySelector('.id').value);
-			console.log('run');
 			fetch(URL+'user?id='+ev.target.querySelector('.id').value,
 					{headers:new Headers({
 						'Access-Control-Allow-Origin': '*',
@@ -47,6 +52,35 @@ const app = {
 		
 		//event ev
 		sendFriendRequest(ev){
+			ev.preventDefault();
+			
+			fetch(URL+'friend_requests?friendId='+ev.target.querySelector(".id").value+'&userID='+this.user.id,
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					method:'POST',
+					})
+					.catch(function(error){
+						console.log(error);
+					});
+		},
+		
+		addIngredient(ev){
+			ev.preventDefault();
+			
+			fetch(URL+'ingredient?name='+ev.target.querySelector(".name").value
+					+'&ownerId='+this.user.id+'&expirationYear='+ev.target.querySelector(".year").value
+					+'&expirationMonth='+ev.target.querySelector(".month").value
+					+'&expirationDayOfMonth='+ev.target.querySelector(".day").value,
+					{headers:new Headers({
+						'Access-Control-Allow-Origin': '*',
+					}),
+					method:'POST',
+					})
+					.catch(function(error){
+						console.log(error);
+					});
+			
 		},
 		
 		
@@ -94,7 +128,7 @@ const app = {
 		acceptFriendRequest(ev){
 			ev.preventDefault();
 			
-			fetch(URL+'friend_requests/accept?friendRequestId='+ev.target.parentElement.querySelector(".id").value,
+			fetch(URL+'friend_requests/accept?friendRequestId='+ev.target.parentElement.querySelector(".id").textContent,
 					{headers:new Headers({
 						'Access-Control-Allow-Origin': '*',
 					}),
@@ -110,7 +144,7 @@ const app = {
 		rejectFriendRequest(ev){
 			ev.preventDefault();
 			
-			fetch(URL+'friend_requests/reject?friendRequestId='+ev.target.parentElement.querySelector(".id").value,
+			fetch(URL+'friend_requests/reject?friendRequestId='+ev.target.parentElement.querySelector(".id").textContent,
 					{headers:new Headers({
 						'Access-Control-Allow-Origin': '*',
 					}),
@@ -125,7 +159,8 @@ const app = {
 		//handles filling in the page for that users data
 		//User user
 		renderUser(user){
-			//display user info?
+			//display user info
+			this.loginForm.querySelector(".name").textContent = 'Name:'+user.name;
 			this.user = user;
 			//get friends
 			console.log(user);
@@ -182,7 +217,6 @@ const app = {
 			
 			item.querySelector('.userId').textContent = request.userId;
 			item.querySelector('.id').textContent = request.id;
-			//TODO
 			item.querySelector('.accept').addEvenListener('click', this.acceptFriendRequest.bind(this));
 			item.querySelector('.reject').addEvenListener('click', this.rejectFriendRequest.bind(this));
 			
@@ -203,8 +237,7 @@ const app = {
 			item.querySelector('.name').textContent = ingredient.name;
 			item.querySelector('.id').textContent = ingredient.id;
 			item.querySelector('.date').textContent = ingredient. expirationDate
-			//TODO
-			//item.querySelector('.delete').addActionListener(this.deleteIngredient.bind(this));
+			item.querySelector('.delete').addEventListener('click', this.deleteIngredient.bind(this));
 			
 			this.ingredients.insertBefore(item, this.ingredients.firstChild);
 		},
@@ -212,7 +245,7 @@ const app = {
 		deleteIngredient(ev){
 			ev.preventDefault();
 			
-			fetch(URL+'ingredient?id='+ev.target.parentElement.querySelector(".id").value,
+			fetch(URL+'ingredient?id='+ev.target.parentElement.querySelector(".id").textContent,
 					{headers:new Headers({
 						'Access-Control-Allow-Origin': '*',
 					}),
@@ -235,8 +268,6 @@ const app = {
 			item.classList.remove('template');
 			item.querySelector('.name').textContent = user.name;
 			item.querySelector('.userID').textContent = user.ID;
-			//TODO
-			//item.querySelector('.delete').addActionListener(this.deleteFriend.bind(this));
 			
 			this.friends.insertBefore(item, this.friends.firstChild);
 		},

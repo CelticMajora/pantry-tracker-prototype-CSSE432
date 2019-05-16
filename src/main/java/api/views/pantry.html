@@ -92,15 +92,7 @@
             <span class="text-primary"></span>
           </div>
         </div>
-		<ul id="ingredientList">
-        <li class="ingredient template">
-                        <span class="id">IngredientID</span>
-                         <span class="name">Name</span>
-                         <span class="date">Expiration Date</span>
-                         
-                            <button class="delete button alert">🗑️</button>
-                    </li>
-                    </ul>
+
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
             <h3 class="mb-0"></h3>
@@ -111,7 +103,28 @@
             <span class="text-primary"></span>
           </div>
         </div>
-
+        
+        
+        <form class="ingredient">
+        <input class="name" type=text>
+        <input class="month" type=text placeholder="MM">
+        <span>/</span>
+        <input class="day" type="text" placeholder="DD">
+        <span>/</span>
+        <input class="year" type=text placeholder="YYYY"><br>
+        <input type="Submit" value="Add Ingredient">
+        </form>
+        
+		<ul id="ingredientList">
+        <li class="ingredient template">
+                        <span class="id">IngredientID</span>
+                         <span class="name">Name</span>
+                         <span class="date">Expiration Date</span>
+                         
+                            <button class="delete button alert">🗑️</button>
+                    </li>
+                    </ul>
+                    
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
             <h3 class="mb-0"></h3>
@@ -156,11 +169,15 @@
           </div>
         </div>
         
+        <form class="friend">
+        <input class="name" type="text">
+        <input type="Submit" value="Add Friend by ID">
+        </form>
+        
         <ul id="friendsList">
         <li class="friend template">
                         <span class="userID">UserID</span>
                          <span class="name">Name</span>
-                            <button class="delete button alert">🗑️</button>
                     </li>
                     </ul>
                     
@@ -168,7 +185,6 @@
         <li class="friendRequest template">
                         <span class="userID">UserID</span>
                         <span class="id">RequestID</span>
-                        <span class="name">Name</span>
                         <button class="accept button">accept</button>
                         <button class="reject button alert">🗑️</button>
                     </li>
@@ -194,7 +210,7 @@
       <div class="w-100">
         <h2 class="mb-5">My Profile</h2>
 			<form class="login">
-				User ID:<br>
+				<span class="name">User ID:</span><br>
 				<input class="id" type="text" name="ID"><br>
 				<input type="Submit" value="Submit">
 				<input class="delete" type="button" value="Delete">
