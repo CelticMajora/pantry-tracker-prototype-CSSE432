@@ -34,14 +34,9 @@ public class UserController {
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public @ResponseBody User getUser(@RequestParam String id) {
-		System.out.println(id);
-		Iterator<User> iterator = userRepository.findAll().iterator();
-		while(iterator.hasNext()) {
-			User next = iterator.next();
-			if(next.getId().equals(Integer.parseInt(id))) {
-				System.out.println(next);
-				return next;
-			}
+		Optional<User> user = userRepository.findById(Integer.parseInt(id));
+		if(user.isPresent()) {
+			return user.get();
 		}
 		throw new RuntimeException(String.format("Unable to find user with id: %s", id));
 	}
