@@ -1,13 +1,5 @@
 # Pantry Tracker
 
-[![pipeline status](https://ada.csse.rose-hulman.edu/donohoc1/pantry-tracker/badges/master/pipeline.svg)](https://ada.csse.rose-hulman.edu/donohoc1/pantry-tracker/commits/master)
-
-Computer Networks Term Project
-
-Link to repository: https://ada.csse.rose-hulman.edu/donohoc1/pantry-tracker.git
-
-Link to slideshow presentation: https://docs.google.com/presentation/d/15pV5Vktk-NdWcAq_OQAXK__zSnMlgS5OuGPKrNhsd1Q/edit?usp=sharing
-
 ## Usage:
 
 First time database stuff:
