@@ -1,4 +1,7 @@
-# Pantry Tracker
+# pantry-tracker-prototype-CSSE432
+CSSE432 Term Project - Spring 2018-2019
+
+My team-mates for this project were Ana Huerta and Keith Hanson
 
 ## Usage:
 
